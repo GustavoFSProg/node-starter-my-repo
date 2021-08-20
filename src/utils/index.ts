@@ -1,7 +1,7 @@
 import { IUser } from 'interfaces'
 import md5 from 'md5'
 import jwt from 'jsonwebtoken'
-import User from '../models/User'
+import UserModel from '../models/User'
 
 const emailPattern =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -37,18 +37,18 @@ export function verifyToken(token: string) {
 const USER_FIELDS = 'firstname lastname email'
 
 export async function getUserByEmailAndPassword(email: string, password: string) {
-  const user = await User.findOne({ email, password: encryptPassword(password) }, USER_FIELDS)
+  const user = await UserModel.findOne({ email, password: encryptPassword(password) }, USER_FIELDS)
   return user
 }
 
 export async function getUserByEmail(email: string) {
-  const user = await User.findOne({ email }, USER_FIELDS)
+  const user = await UserModel.findOne({ email }, USER_FIELDS)
   return user
 }
 
 export async function createUser(data: IUser) {
   const { firstname, lastname, email, password } = data
-  const currentUser = await User.create({
+  const currentUser = await UserModel.create({
     firstname,
     lastname,
     email,

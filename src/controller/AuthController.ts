@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 
+import UserModel from '../models/User'
 import { registerValidation, loginValidation } from '../validators/AuthValidator'
 import { registerConfirmationEmail } from '../emails/registerConfirmationEmail'
 import { createUser, generateToken } from '../utils'
@@ -31,6 +32,16 @@ export async function login(req: Request, res: Response) {
     const token = await generateToken(user)
 
     return res.status(200).json({ user, token })
+  } catch (error) {
+    return res.status(400).send({ message: 'Unexpected Error' })
+  }
+}
+
+export async function getAll(req: Request, res: Response) {
+  try {
+    const data = await UserModel.find()
+
+    return res.status(200).json({ data })
   } catch (error) {
     return res.status(400).send({ message: 'Unexpected Error' })
   }
